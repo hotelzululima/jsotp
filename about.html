@@ -1,0 +1,142 @@
+<HTML>
+<HEAD>
+<TITLE>About jsotp</TITLE>
+</HEAD>
+
+<BODY>
+
+<H3>About <em>jsotp</em></H3>
+
+<em>jsotp</em> is a JavaScript implementation of a one-time password
+generator/calculator for the OTP and S/Key systems. It supports MD4, MD5, and
+SHA-1 hashing methods, by way of <A
+HREF="http://pajhome.org.uk/crypt/md5/">code</A> written by Paul Johnston. It
+also supports RIPEMD-160, through some <A
+HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/src/hash/rmd160.js">code</A>
+that I wrote. This calculator was inspired by Harry Mantakos's Java applet
+OTP calculator (available <A HREF="http://www.cs.umd.edu/~harry/jotp/">at his
+site</A>). If there's already a Java applet version, then why a JavaScript
+version? Because in regard to web browsers, JavaScript is still by far the
+most universally available programming language (I was actually very
+surprised that I couldn't find an existing JavaScript-based
+calculator).
+
+Also, I've added some enhancements that make <em>jsotp</em> basically the
+only thing you need for generating OTP and S/Key passwords: it runs in most
+semi-modern web browsers, can generate passwords for all of the hash methods
+commonly supported, and can generate single passwords, as well as lists of
+passwords suitable for printing. Another benefit is that if you're using
+<em>jsotp</em> remotely, it's relatively easy for you to verify that the copy
+you're using doesn't do anything funny, since you can easily view the source
+from within your browser.
+
+<p>
+
+If you're so inclined, <em>jsotp</em> can also be used as a divination tool.
+Just type in your question as the seed, enter your current favorite
+not-too-big number, and flail on the keyboard for a bit. Finally, pick your
+lucky hashing method to see what fate has in store for you today.  It usually
+doesn't make much sense, but then again, what in life does?
+
+<p>
+
+Feel free to examine the source and host a copy of your own for better
+security. If you intend for other people also to use your copy, however,
+please at least retain a link back to the <em>jsotp</em> site.
+
+<p>
+
+Questions, comments, bug reports, etc? <A
+HREF="mailto:jjlin-at-OCF.Berkeley.EDU">Email me</A>.
+
+<H3>What are OTP and S/Key, and why use them?</H3>
+
+OTP and S/Key are one-time password systems. Unsurprisingly, OTP also stands
+for "one-time password". In these systems, you generate a sequence of hashes
+by repeatedly applying a secure one-way hash on a random seed value prepended
+to your secret passphrase. Then you can use the hashes as one-time passwords,
+in backwards order; since the hashes are one-way, knowing a hash later in the
+sequence will not help you compute an earlier hash in a reasonable amount of
+time. Note that since the hashes are just random-looking 64-bit numbers, they
+are usually converted to a six-word format to make it easier for the user to
+keep track of what he's typing. Also, while OTP generators are required to
+show the words in all uppercase, the server should not care what case they
+are in, so feel free to type an OTP in all lowercase.
+
+<P>
+
+OTP is basically a somewhat updated (and mostly compatible) version of the
+S/Key system created at Bellcore (which also owns the trademark on the name
+S/Key). OTP is described in <A HREF="http://www.ietf.org/rfc/rfc2289.txt">RFC
+2289</A>, and S/Key is described in <A
+HREF="http://www.ietf.org/rfc/rfc1760.txt">RFC 1760</A>. You can also find
+some additional documents related to OTP authentication <A
+HREF="http://www.ietf.org/html.charters/otp-charter.html">here</A>. OTP and
+S/Key have generally not been all that useful since the advent of SSH, but I
+think they remain useful in two situations:
+
+<UL>
+
+<LI>You want to log into a remote system from a computer that has neither a
+native SSH client nor a browser that supports running a Java applet SSH
+client (either because Java isn't installed, or the version is too old), or
+the connection is slow and you just don't feel like downloading a large
+applet. In this case, as long as you do have a telnet client (which comes
+with most operating systems), an OTP system can be a good alternative.
+
+<LI>You want to log into a remote system from another computer, but you
+suspect (or are just paranoid) that this computer may log keystrokes or
+something. Having an SSH client available obviously doesn't help with this
+problem, but having a precomputed list of one-time passwords does (though
+having such a list ready when you need it does require a little advance
+planning). You can use <em>jsotp</em> to generate however many passwords you
+think you might need (make sure you do it from a trusted computer!), then
+print them out and keep them safely with you.
+
+<P>
+
+OTP's can be used fruitfully with other network services (such as email, FTP,
+etc.), assuming the particular daemon you're using can be configured to
+accept OTP's. For example, if the SSH daemon on the remote end is configured
+to accept OTP's, then you can use an OTP in conjunction with SSH to gain
+end-to-end encryption. However, if you think keystrokes are being logged,
+then it's not such a stretch to think that the local SSH client may be
+capturing incoming data too, so it's still risky to type or display anything
+sensitive. Also, there are more nefarious, active attacks that OTP's would
+not provide any protection against; for example, the local SSH client could
+conceivably be trojaned to allow an attacker to send commands of his choice
+to the system you've logged into.
+
+</UL>
+
+<H3>The source</H3>
+
+<em>jsotp</em> is normally stripped of comments and whatnot to make it a tiny
+bit faster to download. There are also versions that include only one
+particular hashing method (<A
+HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/md4/">MD4</A>, <A
+HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/md5/">MD5</A>, <A
+HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/sha1/">SHA-1</A>, <A
+HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/rmd160/">RIPEMD-160</A>)
+that provide a more noticeable decrease in page size (these contain all code
+inline, so you can just save the page without copying any other source
+files). And while it's not all that interesting, you can find the version
+with comments retained as
+<b>otp.js</b> in <A HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/src/">this
+directory</A>.
+
+<H3>License</H3>
+
+<em>jsotp</em> is available under a BSD-style <A
+HREF="license.html">license</A>. The HTML scaffolding on this site also falls
+under the same license. As mentioned previously, feel free to mirror whatever
+pages you need on your own webspace for better security (and again, note that
+the single-hash versions contain all code inline, so you can just save the
+page directly).
+
+<p>
+
+<A HREF="mailto:jjlin-at-OCF.Berkeley.EDU">Jeremy Lin</A>, Dec. 2003, Mar. 2004.
+
+</BODY>
+</HTML>
