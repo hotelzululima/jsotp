@@ -1,0 +1,120 @@
+<HTML>
+<HEAD>
+<TITLE>jsotp: JavaScript OTP & S/Key Calculator</TITLE>
+</HEAD>
+
+<BODY>
+<SCRIPT LANGUAGE="JavaScript" SRC="src/hash/md4.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" SRC="src/hash/md5.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" SRC="src/hash/sha1.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" SRC="src/hash/rmd160.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" SRC="src/otp-stripped.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" SRC="src/dict.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript"><!--
+// OTP code. Copyright (c) 2003-2004, Jeremy Lin.
+// See <http://www.ocf.berkeley.edu/~jjlin/jsotp/about.html> for details.
+
+FORMAT = a_to_both; // default; others can be selected via onClick handler
+JSOTP_PW_WINDOW = null;
+function with_hash(alg) {
+  var challenge = document.otp_form.challenge.value.split(/\s+/);
+  var iter = parseInt(challenge[0], 10);
+  var secret = document.otp_form.secret.value;
+  var num_pw = parseInt(document.otp_form.num_pw.value);
+  var ans_box = document.otp_form.answer;
+  if (challenge.length != 2 || isNaN(iter)) {
+    ans_box.value = "Challenge not in form of <number> <string>.";
+    return;
+  } else if (isNaN(num_pw) || num_pw < 1) {
+    ans_box.value = "Number of passwords requested must be at least 1.";
+    return;
+  } else if (num_pw > iter + 1) {
+    ans_box.value = "At most " + (iter+1) + " passwords can be computed " +
+                    "from that input.";
+    return;
+  }
+  var one = (num_pw == 1);
+  var gen_otp;
+  switch (alg) {
+  case 'MD4': gen_otp = one ? gen_otp_md4 : gen_otp_mult_md4; break;
+  case 'MD5': gen_otp = one ? gen_otp_md5 : gen_otp_mult_md5; break;
+  case 'SHA1': gen_otp = one ? gen_otp_sha1 : gen_otp_mult_sha1; break;
+  case 'RMD160': gen_otp = one ? gen_otp_rmd160 : gen_otp_mult_rmd160; break;
+  }
+  if (one) {
+    ans_box.value = "Computing...";
+    var pw = gen_otp(secret, challenge[1], iter);
+    ans_box.value = FORMAT(pw);
+  } else {
+    ans_box.value = "Computing...    (Passwords will appear in a new window.)";
+    var pwa = gen_otp(secret, challenge[1], iter, num_pw);
+    JSOTP_PW_WINDOW = window.open("", "jsotp_pw_window","");
+    JSOTP_PW_WINDOW.document.open();
+    JSOTP_PW_WINDOW.document.writeln("<HTML><BODY><PRE>");
+    var base = iter - num_pw + 1;
+    for (var i = 0; i < pwa.length; ++i)
+      JSOTP_PW_WINDOW.document.writeln((base + i) + ": " + FORMAT(pwa[i]));
+    JSOTP_PW_WINDOW.document.writeln("</PRE></BODY></HTML>");
+    JSOTP_PW_WINDOW.document.close();
+    ans_box.value = "Done."
+  }
+}
+//-->
+</SCRIPT>
+
+<NOSCRIPT>
+<DIV ALIGN="center"><B>Warning: JavaScript appears to be disabled. To run this
+calculator, JavaScript needs to be enabled.</B></DIV><BR><BR>
+</NOSCRIPT>
+
+<DIV ALIGN="center">
+<b><big>jsotp: JavaScript OTP Calculator</big></b><br>
+<small>This calculator generates passwords for the OTP or S/Key one-time-password systems.</small>
+</DIV>
+
+<BR><BR>
+
+<FORM NAME="otp_form">
+Challenge: <INPUT TYPE="text" NAME="challenge" SIZE=36>
+(<em>e.g.</em>, 98 seed123)
+<P>
+Secret: <INPUT TYPE="password" NAME="secret" SIZE=40>
+(<em>i.e.</em>, your passphrase)
+<P>
+Display results in:
+<INPUT TYPE="radio" NAME="format" VALUE="six"
+onClick="javascript:FORMAT=a_to_6word;">Six-word format&nbsp;&nbsp;
+<INPUT TYPE="radio" NAME="format" VALUE="hex"
+onClick="javascript:FORMAT=a_to_hex;">Hex format&nbsp;&nbsp;
+<INPUT TYPE="radio" NAME="format" VALUE="both" CHECKED
+onClick="javascript:FORMAT=a_to_both;">Both
+<P>
+Compute <INPUT TYPE="text" NAME="num_pw" VALUE="1" SIZE=2>
+password(s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(If more than 1, results will be displayed in a new window.)
+<P>
+Compute with:
+<INPUT TYPE="button" VALUE=" MD4 " onClick="javascript:with_hash('MD4');">
+&nbsp;&nbsp;
+<INPUT TYPE="button" VALUE=" MD5 " onClick="javascript:with_hash('MD5');">
+&nbsp;&nbsp;
+<INPUT TYPE="button" VALUE=" SHA-1 " onClick="javascript:with_hash('SHA1');">
+&nbsp;&nbsp;
+<INPUT TYPE="button" VALUE=" RIPEMD-160 " onClick="javascript:with_hash('RMD160');">
+<p>
+<b>Response</b> (<em>i.e.</em>, your one-time password)<br>
+<INPUT TYPE="text" NAME="answer" SIZE=65>
+<p>
+<A HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/"><em>jsotp</em></A>
+[<A HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/about.html">?</A>] by Jeremy
+Lin. Suggestions, bugs, etc? <A HREF="mailto:jjlin-at-OCF.Berkeley.EDU">Email
+me</A>.
+<p>
+Also available: <em>jsotp</em> versions containing only
+<A HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/md4/">MD4</A>,
+<A HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/md5/">MD5</A>,
+<A HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/sha1/">SHA-1</A>, or
+<A HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/rmd160/">RIPEMD-160</A> code.
+</FORM>
+</BODY>
+</HTML>
