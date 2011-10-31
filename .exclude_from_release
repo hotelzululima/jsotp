@@ -1,0 +1,4 @@
+.exclude_from_release
+.git*
+GNUmakefile
+compiler.jar
