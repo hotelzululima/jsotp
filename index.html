@@ -16,24 +16,23 @@ calculator, JavaScript needs to be enabled.</B></DIV><BR><BR>
 <small>This calculator generates passwords for the OTP or S/Key one-time-password systems.</small>
 </DIV>
 
-<BR><BR>
+<BR>
 
-<FORM NAME="otp_form">
-Challenge: <INPUT TYPE="text" NAME="challenge" SIZE=36>
+<FORM>
+Challenge: <INPUT TYPE="text" ID="challenge" SIZE=36>
 (<em>e.g.</em>, 98 seed123)
 <P>
-Secret: <INPUT TYPE="password" NAME="secret" SIZE=40>
+Secret: <INPUT TYPE="password" ID="secret" SIZE=40>
 (<em>i.e.</em>, your passphrase)
 <P>
 Display results in:
-<INPUT TYPE="radio" NAME="format" VALUE="six"
-onClick="javascript:FORMAT=a_to_6word;">Six-word format&nbsp;&nbsp;
-<INPUT TYPE="radio" NAME="format" VALUE="hex"
-onClick="javascript:FORMAT=a_to_hex;">Hex format&nbsp;&nbsp;
-<INPUT TYPE="radio" NAME="format" VALUE="both" CHECKED
-onClick="javascript:FORMAT=a_to_both;">Both
+<INPUT TYPE="radio" NAME="format" onClick="javascript:JSOTP_FORMAT=a_to_6word;">Six-word format
+&nbsp;
+<INPUT TYPE="radio" NAME="format" onClick="javascript:JSOTP_FORMAT=a_to_hex;">Hex format
+&nbsp;
+<INPUT TYPE="radio" NAME="format" CHECKED onClick="javascript:JSOTP_FORMAT=a_to_both;">Both
 <P>
-Compute <INPUT TYPE="text" NAME="num_pw" VALUE="1" SIZE=2>
+Compute <INPUT TYPE="text" ID="num_pw" VALUE="1" SIZE=2>
 password(s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 (If more than 1, results will be displayed in a new window.)
 <P>
@@ -47,7 +46,7 @@ Compute with:
 <INPUT TYPE="button" VALUE=" RIPEMD-160 " onClick="javascript:with_hash('RMD160');">
 <p>
 <b>Response</b> (<em>i.e.</em>, your one-time password)<br>
-<INPUT TYPE="text" NAME="answer" SIZE=65>
+<INPUT TYPE="text" ID="answer" SIZE=65>
 <p>
 <A HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/"><em>jsotp</em></A>
 [<A HREF="http://www.ocf.berkeley.edu/~jjlin/jsotp/about.html">?</A>] by Jeremy

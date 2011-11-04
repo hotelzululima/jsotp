@@ -1,5 +1,5 @@
 // standard dictionary copied from RFC 2289
-WORDS = [
+var WORDS = [
     "A",     "ABE",   "ACE",   "ACT",   "AD",    "ADA",   "ADD",
     "AGO",   "AID",   "AIM",   "AIR",   "ALL",   "ALP",   "AM",    "AMY",
     "AN",    "ANA",   "AND",   "ANN",   "ANT",   "ANY",   "APE",   "APS",
